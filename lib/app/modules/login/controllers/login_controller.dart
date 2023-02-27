@@ -13,7 +13,7 @@ class LoginController extends GetxController {
   final _getConnect = GetConnect();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  final authToken = GetStorage();
+  final auth = GetStorage();
 
   @override
   void onInit() {
@@ -41,12 +41,13 @@ class LoginController extends GetxController {
         'email': emailController.text,
         'password': passwordController.text,
       },
-    );
+    );  
 
     var decodedResponse =
         jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
     if (decodedResponse['success'] == true) {
-      authToken.write('token', decodedResponse['access_token']);
+      auth.write('token', decodedResponse['access_token']);
+      auth.write('full_name', decodedResponse['full_name']);
       Get.offAllNamed('/home');
     } else {
       Get.snackbar('Error', decodedResponse['message'],
